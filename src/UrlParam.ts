@@ -11,6 +11,7 @@ export default class UrlParam {
   initialPath?: string | null;
   tableConfig?: TableConfig;
   option?: TDVOption;
+  dataParser?: string | null;
 
   constructor() {
     const url = new URL(window.location.href);
@@ -19,6 +20,7 @@ export default class UrlParam {
     this.embeddedId = url.searchParams.get('embeddedId');
     this.initialPath = url.searchParams.get('initialPath');
     this.title = url.searchParams.get('title') || 'Treedoc Viewer';
+    this.dataParser = url.searchParams.get('dataParser');
 
     const tableConfigStr = url.searchParams.get('tableConfig');
     if (tableConfigStr)

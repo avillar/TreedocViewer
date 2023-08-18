@@ -98,9 +98,11 @@ export default class JsonTreeTable extends Vue {
   @Prop() options?: TDVOptions;
   @Prop() initalPath!: string;
   @Prop() rootObjectKey!: string;
+  @Prop() initialDataParser?: JSONParserPlugin | null;
 
   defaultParser: ParserPlugin<any> = new JSONParserPlugin();
-  selectedParser: ParserPlugin<any> = this.defaultParser;
+  selectedParser: ParserPlugin<any> = this.initialDataParser || this.defaultParser;
+  useInitialDataParser: boolean = !!this.initialDataParser;
   tstate = new TreeState({}, this.selectedParser).setInitSOpt(this.options);
   jsonStr = '';
 
@@ -187,7 +189,8 @@ export default class JsonTreeTable extends Vue {
       this.tstate.codeView[0] = true;
     // Need detected only if significant changes happens. Not accurate.
     const oldLen = old ? old.length : 0;
-    const detectNeeded = Math.abs(oldLen - str.length) > 7;
+    const detectNeeded = Math.abs(oldLen - str.length) > 7 && !this.useInitialDataParser;
+    this.useInitialDataParser = false;
     this.parse(str, this, detectNeeded);
   }
 

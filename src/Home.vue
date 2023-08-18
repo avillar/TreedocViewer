@@ -1,6 +1,6 @@
 <template>
   <div id='app' class='components-container'>
-    <json-tree-table :data='jsonData' :inital-path="param.initialPath || '/'" :options='tdvOption' rootObjectKey='root' class="json-tree-table" ref="jsonTreeTable">
+    <json-tree-table :data='jsonData' :initial-data-parser="initialDataParser" :inital-path="param.initialPath || '/'" :options='tdvOption' rootObjectKey='root' class="json-tree-table" ref="jsonTreeTable">
       <template v-slot:title>
         <a href="https://www.treedoc.org"><b class="tdv-title">{{param.title}}</b></a>
       </template>
@@ -30,7 +30,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import JsonTreeTable from './components/JsonTreeTable.vue';
 import JsonTable from './components/JsonTable.vue';
 import sampleData from './sampleData';
-import TDVOptions from './models/TDVOption';
+import TDVOptions, { ParserPlugin } from './models/TDVOption';
 import YAMLParserPlugin from './parsers/YAMLParserPlugin';
 import XMLParserPlugin from './parsers/XMLParserPlugin';
 import CSVParserPlugin from './parsers/CSVParserPlugin';
@@ -48,6 +48,7 @@ export default class Home extends Vue {
   param = new UrlParam();
   sampleData = sampleData.data;
   jsonData: any = sampleData.data[0].value;
+  initialDataParser?: ParserPlugin<any>;
 
   tdvOption: TDVOptions = new TDVOptions().setParsers([
       new JSONParserPlugin('Lombok.toString', JSONParserType.LOMBOK_TO_STRING),
@@ -71,6 +72,9 @@ export default class Home extends Vue {
   beforeMount() {
     if (this.param.data)
       this.jsonData = this.param.data;
+
+    if (this.param.dataParser)
+      this.initialDataParser = this.tdvOption.parsers?.find(p => p.syntax === this.param.dataParser);
 
     if (this.param.option) {
       Object.assign(this.tdvOption, this.param.option);
