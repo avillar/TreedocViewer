@@ -48,7 +48,7 @@ export default class Home extends Vue {
   param = new UrlParam();
   sampleData = sampleData.data;
   jsonData: any = sampleData.data[0].value;
-  initialDataParser?: ParserPlugin<any>;
+  initialDataParser?: string | null;
 
   tdvOption: TDVOptions = new TDVOptions().setParsers([
       new JSONParserPlugin('Lombok.toString', JSONParserType.LOMBOK_TO_STRING),
@@ -73,8 +73,7 @@ export default class Home extends Vue {
     if (this.param.data)
       this.jsonData = this.param.data;
 
-    if (this.param.dataParser)
-      this.initialDataParser = this.tdvOption.parsers?.find(p => p.syntax === this.param.dataParser);
+    this.initialDataParser = this.param.dataParser;
 
     if (this.param.option) {
       Object.assign(this.tdvOption, this.param.option);

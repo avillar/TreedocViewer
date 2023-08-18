@@ -98,10 +98,10 @@ export default class JsonTreeTable extends Vue {
   @Prop() options?: TDVOptions;
   @Prop() initalPath!: string;
   @Prop() rootObjectKey!: string;
-  @Prop() initialDataParser?: JSONParserPlugin | null;
+  @Prop() initialDataParser?: string | null;
 
   defaultParser: ParserPlugin<any> = new JSONParserPlugin();
-  selectedParser: ParserPlugin<any> = this.initialDataParser || this.defaultParser;
+  selectedParser: ParserPlugin<any> = this.defaultParser;
   useInitialDataParser: boolean = !!this.initialDataParser;
   tstate = new TreeState({}, this.selectedParser).setInitSOpt(this.options);
   jsonStr = '';
@@ -130,6 +130,12 @@ export default class JsonTreeTable extends Vue {
 
   format() {
     this.jsonStr = TDJSONWriter.get().writeAsString(this.tstate.tree.root, new TDJSONWriterOption().setIndentFactor(2));
+  }
+
+  created() {
+    if (this.initialDataParser) {
+      this.selectedParser = this.parserSelectOptions?.find(o => o.value.syntax === this.initialDataParser)?.value || this.selectedParser;
+    }
   }
 
   mounted() {
