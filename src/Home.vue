@@ -1,6 +1,9 @@
 <template>
   <div id='app' class='components-container'>
-    <json-tree-table :data='jsonData' :initial-data-parser="initialDataParser" :inital-path="param.initialPath || '/'" :options='tdvOption' rootObjectKey='root' class="json-tree-table" ref="jsonTreeTable">
+    <json-tree-table :data='jsonData' :initial-data-parser="initialDataParser"
+                     :inital-path="param.initialPath || '/'" :options='tdvOption'
+                     :default-expand-level="param.expand"
+                     rootObjectKey='root' class="json-tree-table" ref="jsonTreeTable">
       <template v-slot:title>
         <a href="https://www.treedoc.org"><b class="tdv-title">{{param.title}}</b></a>
       </template>

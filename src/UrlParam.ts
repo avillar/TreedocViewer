@@ -12,6 +12,7 @@ export default class UrlParam {
   tableConfig?: TableConfig;
   option?: TDVOption;
   dataParser?: string | null;
+  expand?: number | null;
 
   constructor() {
     const url = new URL(window.location.href);
@@ -21,6 +22,10 @@ export default class UrlParam {
     this.initialPath = url.searchParams.get('initialPath');
     this.title = url.searchParams.get('title') || 'Treedoc Viewer';
     this.dataParser = url.searchParams.get('dataParser');
+    this.expand = parseInt(url.searchParams.get('expand') || '1');
+    if (!this.expand || this.expand < 0) {
+      this.expand = 1;
+    }
 
     const tableConfigStr = url.searchParams.get('tableConfig');
     if (tableConfigStr)

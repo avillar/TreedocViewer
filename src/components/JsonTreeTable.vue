@@ -47,7 +47,7 @@
           <!-- tstate.selected={{tstate.selected}} -->
           <tree-view v-if="tstate.tree" 
               :tstate="tstate"
-              :expand-level=1
+              :expand-level="defaultExpandLevel"
               :rootObjectKey='rootObjectKey' 
               />
           <div v-else>No Data</div>
@@ -99,6 +99,7 @@ export default class JsonTreeTable extends Vue {
   @Prop() initalPath!: string;
   @Prop() rootObjectKey!: string;
   @Prop() initialDataParser?: string | null;
+  @Prop({ default: 1 }) defaultExpandLevel?: number;
 
   defaultParser: ParserPlugin<any> = new JSONParserPlugin();
   selectedParser: ParserPlugin<any> = this.defaultParser;
